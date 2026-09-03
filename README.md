@@ -14,12 +14,15 @@ permissions. Clean MVC backend, modern minimal light-theme React frontend.
 
 | Role | Capabilities |
 |---|---|
-| **Admin** | Dashboard with live stats, manage students, manage teachers, manage classes, post notices, activate/deactivate accounts |
+| **Public visitor** (not logged in) | About page: school name/tagline, establishment year, UDISE code, board affiliation, about text, principal's message, facilities grid, achievements, photo gallery, contact info |
+| **Admin** | Dashboard with live stats, manage students, manage teachers, manage classes, build class timetables, manage fee records + payments, post notices, edit the public School Profile (About page content + photos), activate/deactivate accounts |
 | **Teacher** | View assigned classes, mark daily attendance, create exams, enter marks |
-| **Student / Parent** | View profile, attendance % and history, exam results with grades, notices |
+| **Student / Parent** | View profile, attendance % and history, exam results with grades, weekly timetable, fee dues/payment status, notices |
 
-Also included at the data layer (routes + models ready, wire up UI as needed):
-fee tracking (dues/payments), class timetable.
+Each role sees a **different sidebar and different pages** — this isn't just
+visual, it's enforced: a student's login token literally cannot call
+teacher- or admin-only API routes (403 if it tries). See "First-time flow"
+below for exactly how to create and log in as each role.
 
 ## Folder Structure
 
@@ -29,7 +32,7 @@ school-management/
 │   ├── config/db.js              # MongoDB connection
 │   ├── models/                   # Mongoose schemas (User, Student, Teacher,
 │   │                              #   ClassRoom, Attendance, Exam, Result,
-│   │                              #   Notice, Fee, Timetable)
+│   │                              #   Notice, Fee, Timetable, SchoolInfo)
 │   ├── controllers/               # Business logic — one file per resource
 │   ├── routes/                    # Express routers — wire URLs to controllers
 │   ├── middleware/
@@ -47,10 +50,12 @@ school-management/
 │   │   ├── components/            # ProtectedRoute, Table, StatCard
 │   │   ├── layouts/DashboardLayout.jsx   # Sidebar + role-based nav
 │   │   ├── pages/
+│   │   │   ├── Home.jsx           # Public About page (no login required)
 │   │   │   ├── Login.jsx
-│   │   │   ├── admin/             # Dashboard, Students, Teachers, Classes, Notices
+│   │   │   ├── admin/             # Dashboard, Students, Teachers, Classes,
+│   │   │   │                      #   Timetable, Fees, Notices, School Profile
 │   │   │   ├── teacher/           # Dashboard, Attendance, Marks
-│   │   │   └── student/           # Dashboard, MyAttendance, MyResults
+│   │   │   └── student/           # Dashboard, Attendance, Results, Timetable, Fees
 │   │   └── App.jsx                # All routes
 │   └── vite.config.js             # Proxies /api to backend on :5000
 │
@@ -104,13 +109,34 @@ directly for now.
 ### 3. Typical first-time flow
 
 1. Log in as admin.
-2. Go to **Classes** → create a class (e.g. "Class 8", Section "A").
-3. Go to **Teachers** → add a teacher, then edit the class to assign them as
+2. Go to **School Profile** → fill in your school's real name, tagline,
+   establishment year, UDISE code, about text, principal's message,
+   facilities, achievements, and paste in URLs to real photos of your school
+   (hero photo + gallery). Save — then visit `/` in a new tab (logged out or
+   in an incognito window) to see the public About page update live.
+3. Go to **Classes** → create a class (e.g. "Class 8", Section "A").
+4. Go to **Teachers** → add a teacher, then edit the class to assign them as
    class teacher (or extend the Classes form to pick a teacher inline).
-4. Go to **Students** → add students, assigning them to the class you made.
-5. Log out, log in as the teacher you created → mark attendance, create an
-   exam, enter marks.
-6. Log in as a student → see attendance %, results, and notices.
+5. Go to **Students** → add students, assigning them to the class you made.
+6. Go to **Timetable** → pick the class and day, add periods with subject/
+   teacher/time.
+7. Go to **Fees** → pick a student, add a fee record (type, amount, due date).
+8. Log out, log in as the teacher you created → you'll see a completely
+   different sidebar (Attendance, Marks Entry only) — mark attendance,
+   create an exam, enter marks.
+9. Log in as a student → different sidebar again (Attendance, Results,
+   Timetable, Fees, no admin/teacher pages) — see attendance %, results,
+   timetable, and fee status.
+
+### 4. The public About page
+
+Visiting `/` without logging in shows a government-school-style About page
+built from whatever you saved in **School Profile** — no login required.
+Since real school photos can't be bundled into this codebase, you add them
+by pasting a URL to an already-hosted image (your school's existing website,
+a public Google Drive/Photos link, etc.) into the Hero Photo / Gallery
+fields. Leave them blank and the page shows a clean placeholder pattern
+instead of a broken image.
 
 ## Security notes for a government deployment
 
@@ -127,13 +153,16 @@ directly for now.
 
 ## Extending it further
 
-- **Fees UI:** models/routes exist (`Fee.js`, `feeRoutes.js`) — add an admin
-  page similar to `Students.jsx` to record dues/payments per student.
-- **Timetable UI:** same — `Timetable.js` + `timetableRoutes.js` are ready;
-  build a simple weekly grid page.
 - **Parent accounts:** currently parents share the student's view via the
   `parent` role + `Student.parent` reference — add a parent-specific signup
   flow if parents need their own separate login from the student's.
 - **UDISE+ / APAAR integration:** `Student.aparId` field is there as a
   placeholder for the government's Automated Permanent Academic Registry ID
   if you need to sync with state education portals.
+- **Photo uploads:** currently hero/gallery photos are added by pasting a
+  URL. To support direct file uploads, add `multer` on the backend and a
+  file input on the School Profile page, storing files locally or on
+  something like Cloudinary/S3.
+- **Change-password UI:** the backend endpoint exists
+  (`PUT /api/auth/change-password`) but there's no settings page yet —
+  add one so users aren't stuck with the temporary password an admin set.

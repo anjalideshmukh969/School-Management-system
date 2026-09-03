@@ -16,6 +16,7 @@ import noticeRoutes from "./routes/noticeRoutes.js";
 import feeRoutes from "./routes/feeRoutes.js";
 import timetableRoutes from "./routes/timetableRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import schoolInfoRoutes from "./routes/schoolInfoRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -39,6 +40,7 @@ app.use("/api/notices", noticeRoutes);
 app.use("/api/fees", feeRoutes);
 app.use("/api/timetable", timetableRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/school-info", schoolInfoRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

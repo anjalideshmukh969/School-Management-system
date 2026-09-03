@@ -7,7 +7,10 @@ const NAV_BY_ROLE = {
     { to: "/admin/students", label: "Students", icon: "🎓" },
     { to: "/admin/teachers", label: "Teachers", icon: "🧑‍🏫" },
     { to: "/admin/classes", label: "Classes", icon: "🏫" },
+    { to: "/admin/timetable", label: "Timetable", icon: "🗓️" },
+    { to: "/admin/fees", label: "Fees", icon: "💰" },
     { to: "/admin/notices", label: "Notices", icon: "📢" },
+    { to: "/admin/school-profile", label: "School Profile", icon: "🏛️" },
   ],
   teacher: [
     { to: "/teacher", label: "Dashboard", icon: "📊" },
@@ -18,11 +21,15 @@ const NAV_BY_ROLE = {
     { to: "/student", label: "Dashboard", icon: "📊" },
     { to: "/student/attendance", label: "My Attendance", icon: "✅" },
     { to: "/student/results", label: "My Results", icon: "📄" },
+    { to: "/student/timetable", label: "Timetable", icon: "🗓️" },
+    { to: "/student/fees", label: "My Fees", icon: "💰" },
   ],
   parent: [
     { to: "/student", label: "Dashboard", icon: "📊" },
     { to: "/student/attendance", label: "Attendance", icon: "✅" },
     { to: "/student/results", label: "Results", icon: "📄" },
+    { to: "/student/timetable", label: "Timetable", icon: "🗓️" },
+    { to: "/student/fees", label: "Fees", icon: "💰" },
   ],
 };
 
