@@ -1,16 +1,10 @@
 import express from "express";
-import {
-  createExam, getExams, enterResults, getExamResults, getMyResults,
-} from "../controllers/examController.js";
+import { createExam, getExams, enterResults, getExamResults, getMyResults } from "../controllers/examController.js";
 import { protect, authorize } from "../middleware/auth.js";
-
 const router = express.Router();
-
 router.get("/results/me", protect, authorize("student"), getMyResults);
-
 router.post("/", protect, authorize("admin", "teacher"), createExam);
 router.get("/", protect, getExams);
 router.post("/:examId/results", protect, authorize("admin", "teacher"), enterResults);
 router.get("/:examId/results", protect, authorize("admin", "teacher", "student", "parent"), getExamResults);
-
 export default router;

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 const studentSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, unique: true },
@@ -10,10 +9,9 @@ const studentSchema = new mongoose.Schema(
     gender: { type: String, enum: ["male", "female", "other"] },
     guardianName: { type: String },
     guardianPhone: { type: String },
-    parent: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // linked parent login, optional
+    parent: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     address: { type: String },
-    // Common in govt school records (PM Shree / UDISE alignment)
-    aparId: { type: String }, // Automated Permanent Academic Registry ID
+    aparId: { type: String },
     category: { type: String, enum: ["General", "OBC", "SC", "ST", "EWS"] },
     bloodGroup: { type: String },
     admissionDate: { type: Date, default: Date.now },
@@ -21,5 +19,4 @@ const studentSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
 export default mongoose.model("Student", studentSchema);

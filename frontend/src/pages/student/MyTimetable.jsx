@@ -1,24 +1,17 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../layouts/DashboardLayout.jsx";
 import api from "../../api/axios.js";
-
 const MyTimetable = () => {
-  const [profile, setProfile] = useState(null);
   const [timetable, setTimetable] = useState([]);
-
   useEffect(() => {
     api.get("/students/me").then(({ data }) => {
-      setProfile(data);
       const classId = data.classRoom?._id;
       if (classId) api.get(`/timetable/class/${classId}`).then(({ data }) => setTimetable(data));
     });
   }, []);
-
   return (
     <DashboardLayout title="My Timetable">
-      {timetable.length === 0 ? (
-        <p className="text-gray-500 text-sm text-center py-8">No timetable published yet for your class.</p>
-      ) : (
+      {timetable.length === 0 ? <p className="text-gray-500 text-sm text-center py-8">No timetable published yet for your class.</p> : (
         <div className="space-y-4">
           {timetable.map((day) => (
             <div key={day._id} className="bg-white rounded-xl border border-gray-200 p-5">
@@ -39,5 +32,4 @@ const MyTimetable = () => {
     </DashboardLayout>
   );
 };
-
 export default MyTimetable;

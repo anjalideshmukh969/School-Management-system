@@ -1,6 +1,4 @@
 import mongoose from "mongoose";
-
-// An exam definition, e.g. "Half Yearly 2026 - Class 8"
 const examSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
@@ -13,5 +11,4 @@ const examSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
 export default mongoose.model("Exam", examSchema);

@@ -3,6 +3,8 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
@@ -27,11 +29,11 @@ import MyTimetable from "./pages/student/MyTimetable.jsx";
 function App() {
   return (
     <Routes>
-      {/* Public — the government-school-style About page, visible to anyone */}
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-      {/* Admin */}
       <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard /></ProtectedRoute>} />
       <Route path="/admin/students" element={<ProtectedRoute allowedRoles={["admin"]}><Students /></ProtectedRoute>} />
       <Route path="/admin/teachers" element={<ProtectedRoute allowedRoles={["admin"]}><Teachers /></ProtectedRoute>} />
@@ -41,12 +43,10 @@ function App() {
       <Route path="/admin/timetable" element={<ProtectedRoute allowedRoles={["admin"]}><TimetableAdmin /></ProtectedRoute>} />
       <Route path="/admin/school-profile" element={<ProtectedRoute allowedRoles={["admin"]}><SchoolProfile /></ProtectedRoute>} />
 
-      {/* Teacher */}
       <Route path="/teacher" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherDashboard /></ProtectedRoute>} />
       <Route path="/teacher/attendance" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherAttendance /></ProtectedRoute>} />
       <Route path="/teacher/marks" element={<ProtectedRoute allowedRoles={["teacher"]}><Marks /></ProtectedRoute>} />
 
-      {/* Student / Parent */}
       <Route path="/student" element={<ProtectedRoute allowedRoles={["student", "parent"]}><StudentDashboard /></ProtectedRoute>} />
       <Route path="/student/attendance" element={<ProtectedRoute allowedRoles={["student", "parent"]}><MyAttendance /></ProtectedRoute>} />
       <Route path="/student/results" element={<ProtectedRoute allowedRoles={["student", "parent"]}><MyResults /></ProtectedRoute>} />

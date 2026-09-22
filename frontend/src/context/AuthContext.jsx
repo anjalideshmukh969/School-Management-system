@@ -1,8 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import api from "../api/axios.js";
-
 const AuthContext = createContext(null);
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const stored = localStorage.getItem("user");
@@ -10,10 +8,8 @@ export const AuthProvider = ({ children }) => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
   const login = async (email, password) => {
-    setLoading(true);
-    setError("");
+    setLoading(true); setError("");
     try {
       const { data } = await api.post("/auth/login", { email, password });
       localStorage.setItem("token", data.token);
@@ -23,22 +19,9 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       setError(err.response?.data?.message || "Login failed. Please try again.");
       throw err;
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-  };
-
-  return (
-    <AuthContext.Provider value={{ user, login, logout, loading, error }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const logout = () => { localStorage.removeItem("token"); localStorage.removeItem("user"); setUser(null); };
+  return <AuthContext.Provider value={{ user, login, logout, loading, error, setError }}>{children}</AuthContext.Provider>;
 };
-
 export const useAuth = () => useContext(AuthContext);

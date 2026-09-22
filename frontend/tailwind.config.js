@@ -13,6 +13,17 @@ export default {
           400: "#60a5fa", 500: "#3b82f6", 600: "#2563eb", 700: "#1d4ed8",
           800: "#1e40af", 900: "#1e3a8a",
         },
+        amber: {
+          50: "#fffbeb", 100: "#fef3c7", 500: "#f59e0b", 600: "#d97706", 700: "#b45309",
+        },
+      },
+      animation: {
+        "fade-up": "fadeUp 0.7s ease-out forwards",
+        float: "float 6s ease-in-out infinite",
+      },
+      keyframes: {
+        fadeUp: { "0%": { opacity: 0, transform: "translateY(24px)" }, "100%": { opacity: 1, transform: "translateY(0)" } },
+        float: { "0%, 100%": { transform: "translateY(0px)" }, "50%": { transform: "translateY(-12px)" } },
       },
     },
   },

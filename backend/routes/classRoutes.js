@@ -1,15 +1,10 @@
 import express from "express";
-import {
-  createClass, getClasses, getClassById, updateClass, deleteClass,
-} from "../controllers/classController.js";
+import { createClass, getClasses, getClassById, updateClass, deleteClass } from "../controllers/classController.js";
 import { protect, authorize } from "../middleware/auth.js";
-
 const router = express.Router();
-
-router.get("/", protect, getClasses); // any logged-in role can view classes
+router.get("/", protect, getClasses);
 router.get("/:id", protect, getClassById);
 router.post("/", protect, authorize("admin"), createClass);
 router.put("/:id", protect, authorize("admin"), updateClass);
 router.delete("/:id", protect, authorize("admin"), deleteClass);
-
 export default router;

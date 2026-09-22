@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 const resultSchema = new mongoose.Schema(
   {
     exam: { type: mongoose.Schema.Types.ObjectId, ref: "Exam", required: true },
@@ -11,7 +10,5 @@ const resultSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
 resultSchema.index({ exam: 1, student: 1 }, { unique: true });
-
 export default mongoose.model("Result", resultSchema);

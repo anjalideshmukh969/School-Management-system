@@ -1,17 +1,10 @@
 import axios from "axios";
-
-const api = axios.create({
-  baseURL: "/api",
-});
-
-// Attach the JWT to every request automatically
+const api = axios.create({ baseURL: "/api" });
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
-
-// If the token is invalid/expired, kick the user back to login
 api.interceptors.response.use(
   (res) => res,
   (err) => {
@@ -23,5 +16,4 @@ api.interceptors.response.use(
     return Promise.reject(err);
   }
 );
-
 export default api;
